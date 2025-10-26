@@ -108,16 +108,20 @@ Bu, tahmin edilen değerlerin yaklaşık %95 olasılıkla bu aralıkta olacağı
 
 | Metric | Value |
 |---------|--------|
-| MAE (Mean Absolute Error) | ≈ 1.8 USD |
-| RMSE (Root Mean Square Error) | ≈ 2.3 USD |
-| MAPE (Mean Absolute Percentage Error) | ≈ 2.7% |
+| MAE (Mean Absolute Error) | ≈ 1.84 USD |
+| RMSE (Root Mean Square Error) | ≈ 2.94 USD |
+| MAPE (Mean Absolute Percentage Error) | ≈ 16.51% |
 | Coverage (Prophet 95% CI) | ≈ 0.94 |
 
 Prophet cross-validation:
 ```python
 df_cv = cross_validation(model, initial="2000 days", period="365 days", horizon="180 days")
 df_perf = performance_metrics(df_cv)
+
 ```
+🧩 Yorum:
+Model genel fiyat trendini başarıyla yakalamıştır, ancak uzun vadeli tahminlerde (90 gün ve üzeri) volatilite nedeniyle hata oranı artmıştır.
+MAPE değerinin %16 civarında olması, Coca-Cola hissesinin düşük ama zaman zaman ani dalgalanmalar sergileyen yapısından kaynaklanmaktadır.
 
 ---
 
@@ -143,5 +147,5 @@ df_perf = performance_metrics(df_cv)
 
 ## ✍️ AUTHOR / YAZAR  
 © Özge Güneş | **Food Engineer & Aspiring Data Science Specialist** | Prophet Forecast Project  
-> “Veri bilimi, geçmişin desenlerini çözerek geleceğe anlam kazandırır.”  
+> “Veri bilimi, geçmişin desenlerini çözerek geleceğe anlam kazandırır.”
 
