@@ -232,9 +232,30 @@ def forecast_price(df, periods=90, save_plots=True):
     print("\n Prophet tahmini tamamlandı.")
     return forecast
 
+
 # ============================================================
-#  MAIN
+#  MODEL METRİKLERİ (HATA ANALİZİ)
 # ============================================================
+from prophet.diagnostics import cross_validation, performance_metrics
+
+def calculate_metrics(model):
+    print("\n📊 Prophet cross-validation başlatılıyor (180 günlük ufuk)...")
+    df_cv = cross_validation(model, initial="2000 days", period="365 days", horizon="180 days")
+    df_perf = performance_metrics(df_cv)
+
+    mae = df_perf['mae'].mean()
+    rmse = df_perf['rmse'].mean()
+    mape = df_perf['mape'].mean() * 100
+
+    print(f"\n✅ Ortalama MAE: {mae:.2f}")
+    print(f"✅ Ortalama RMSE: {rmse:.3f}")
+    print(f"✅ Ortalama MAPE: {mape:.2f}%")
+
+    return df_perf
+
+# ======================================
+# KULLANIM:
+# ======================================
 if __name__ == "__main__":
     df = load_data("Coca_Cola_historical_data.csv")
     df = analyze_data(df)
@@ -243,5 +264,11 @@ if __name__ == "__main__":
     plot_volume_and_price(df)
     df = analyze_returns(df)
     forecast = forecast_price(df, periods=90)
+
+    # Prophet modelini yeniden tanımlayıp metrikleri bastır
+    model = Prophet(daily_seasonality=True)
+    model.fit(df.rename(columns={"Date": "ds", "Close": "y"}))
+    df_perf = calculate_metrics(model)
     print("\n✅ Tüm analiz ve tahmin işlemleri tamamlandı!")
+
 
